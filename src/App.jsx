@@ -3,7 +3,7 @@ import NewProject from "./components/NewProject.jsx";
 import ProjectSidebar from "./components/ProjectSidebar.jsx";
 import NoProjectSelected from "./components/noProjectSelected.jsx";
 
-function App() {
+export default function App() {
   const [projectState,setProjectState]=useState({
     selectedProjectId:undefined,
     projects:[]
@@ -19,17 +19,19 @@ function handleStartAddProject(){
 }
 function handleAddProject(projectData){
 setProjectState(prevState=>{
+  const projectId=Math.random()
   const newProject={
     ...projectData,
-    id:Math.random
+    id:projectId
   };
   return{
-    ...prevState, projects:[...prevState.projects, newProject]
+    ...prevState,
+    selectedProjectId:undefined, projects:[...prevState.projects, newProject]
 
   };
 });
 }
-console.log(projectState)
+
 let content;
 if (projectState.selectedProjectId===null){
   content=<NewProject onAdd={handleAddProject}/>
@@ -38,9 +40,10 @@ if (projectState.selectedProjectId===null){
 }
   return (
     <main className="h-screen my-8 flex gap-8 ">
-      <ProjectSidebar onStartAddProject={handleStartAddProject}/>
+      <ProjectSidebar onStartAddProject={handleStartAddProject} 
+      projects={projectState.projects}/>
       {content}
      </main>)
 }
 
-export default App;
+;
